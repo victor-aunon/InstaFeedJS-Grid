@@ -46,7 +46,7 @@
 }
 
 .pswp img {
-  /* max-width: none; */
+  max-width: none;
 }
 
 .pswp--open {

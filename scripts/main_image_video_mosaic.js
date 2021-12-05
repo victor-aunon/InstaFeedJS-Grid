@@ -1,6 +1,6 @@
 import PhotoSwipeLightbox from './photoswipe-lightbox.esm.min.js';
 import PhotoSwipe from './photoswipe.esm.min.js';
-import instaTokenURL from './secrets.js'
+import instaTokenURL from './secrets.js';
 
 const limit = 5 * 4;
 
@@ -46,7 +46,7 @@ function renderData(data) {
         mosaicDiv.id = mosaicId;
 
         splitData[i].forEach((post, index) => {
-            mosaicDiv.appendChild(createPost(post, mosaicId));
+            mosaicDiv.appendChild(createPost(post));
         });
 
         mosaicDiv.classList.add('mosaic');
@@ -54,7 +54,7 @@ function renderData(data) {
     }
 }
 
-function createPost(post, mosaicId) {
+function createPost(post) {
     const postAnchor = document.createElement('a');
     postAnchor.classList.add('post');
     postAnchor.href = post.thumbnail_url || post.media_url;
@@ -177,9 +177,8 @@ lightbox.on('uiRegister', function () {
                                         ? refElement.alt
                                         : 'Ver en Instagram'
                                     : refElement.dataset.caption !== 'undefined'
-                                        ? refElement.dataset.caption
-                                        : 'Ver en Instagram'
-
+                                    ? refElement.dataset.caption
+                                    : 'Ver en Instagram'
                             }
                         </a>
                     `;
