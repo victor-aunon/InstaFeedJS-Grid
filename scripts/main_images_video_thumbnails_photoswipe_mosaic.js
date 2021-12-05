@@ -61,6 +61,7 @@ function createPost(post, mosaicId) {
             gallery: `#${mosaicId} a`,
             closeTitle: 'Cerrar',
             bgOpacity: 0.85,
+            secondaryZoomLevel: 1.2,
             pswpModule: PhotoSwipe,
         };
         lightbox.options = options;
