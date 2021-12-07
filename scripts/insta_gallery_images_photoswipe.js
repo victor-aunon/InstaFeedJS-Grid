@@ -1,8 +1,11 @@
 import PhotoSwipeLightbox from './photoswipe-lightbox.esm.min.js';
 import PhotoSwipe from './photoswipe.esm.min.js';
 import instaTokenURL from './secrets.js';
+import layouts from './layouts.js';
 
-const limit = 5 * 4;
+const LIMIT = 5 * 4;
+// Layout can be mosaic or threeInRow
+const LAYOUT = layouts.threeInRow;
 
 const feedContainer = document.querySelector('#instafeed');
 
@@ -21,20 +24,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 `https://graph.instagram.com/me/media?fields=caption,id,media_type,media_url,permalink,thumbnail_url,timestamp,username&access_token=${tokenData.Token}`
             )
                 .then(igResponse => igResponse.json())
-                .then(igData =>
-                    renderData(
-                        igData.data.filter(
-                            element => element.media_type !== 'VIDEO'
-                        ).slice(0, limit - 1)
-                    )
-                )
+                .then(igData => {
+                    if (!igData.error) {
+                        renderData(
+                            igData.data
+                                .filter(
+                                    element => element.media_type !== 'VIDEO'
+                                )
+                                .slice(0, LIMIT - 1)
+                        );
+                    } else {
+                        console.error(igData.error.message);
+                    }
+                })
+
                 .catch(error => console.error(error));
         })
         .catch(error => console.error(error));
 });
 
 function renderData(data) {
-    const splitData = chunk(data, 5);
+    const splitData = chunk(data, LAYOUT.items);
 
     for (let i = 0; i < splitData.length; i++) {
         const mosaicDiv = document.createElement('div');
@@ -45,7 +55,7 @@ function renderData(data) {
             mosaicDiv.appendChild(createPost(post, mosaicId));
         });
 
-        mosaicDiv.classList.add('mosaic');
+        mosaicDiv.classList.add(LAYOUT.className);
         feedContainer.appendChild(mosaicDiv);
     }
 }

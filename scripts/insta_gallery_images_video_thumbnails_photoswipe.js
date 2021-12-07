@@ -1,8 +1,11 @@
 import PhotoSwipeLightbox from './photoswipe-lightbox.esm.min.js';
 import PhotoSwipe from './photoswipe.esm.min.js';
 import instaTokenURL from './secrets.js';
+import layouts from './layouts.js';
 
-const limit = 3 * 5;
+const LIMIT = 5 * 4;
+// Layout can be mosaic or threeInRow
+const LAYOUT = layouts.threeInRow;
 
 const feedContainer = document.querySelector('#instafeed');
 
@@ -18,23 +21,23 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(tokenData => {
             fetch(
-                `https://graph.instagram.com/me/media?fields=caption,id,media_type,media_url,permalink,thumbnail_url,timestamp,username&access_token=${tokenData.Token}`
+                `https://graph.instagram.com/me/media?fields=caption,id,media_type,media_url,permalink,thumbnail_url,timestamp,username&access_token=${tokenData.Token}&limit=${LIMIT}`
             )
                 .then(igResponse => igResponse.json())
-                .then(igData =>
-                    renderData(
-                        igData.data.filter(
-                            element => element.media_type !== 'VIDEO'
-                        ).slice(0, limit - 1)
-                    )
-                )
+                .then(igData => {
+                    if (!igData.error) {
+                        renderData(igData.data);
+                    } else {
+                        console.error(igData.error.message);
+                    }
+                })
                 .catch(error => console.error(error));
         })
         .catch(error => console.error(error));
 });
 
 function renderData(data) {
-    const splitData = chunk(data, 3);
+    const splitData = chunk(data, LAYOUT.items);
 
     for (let i = 0; i < splitData.length; i++) {
         const mosaicDiv = document.createElement('div');
@@ -45,7 +48,7 @@ function renderData(data) {
             mosaicDiv.appendChild(createPost(post, mosaicId));
         });
 
-        mosaicDiv.classList.add('three-in-row');
+        mosaicDiv.classList.add(LAYOUT.className);
         feedContainer.appendChild(mosaicDiv);
     }
 }
@@ -53,7 +56,7 @@ function renderData(data) {
 function createPost(post, mosaicId) {
     const postAnchor = document.createElement('a');
     postAnchor.classList.add('post');
-    postAnchor.href = post.media_url;
+    postAnchor.href = post.thumbnail_url || post.media_url;
     postAnchor.dataset.account = `@${post.username}`;
     postAnchor.dataset.link = post.permalink;
 
@@ -75,7 +78,7 @@ function createPost(post, mosaicId) {
     };
 
     const img = document.createElement('img');
-    img.src = post.media_url;
+    img.src = post.thumbnail_url || post.media_url;
     img.alt = post.caption;
     postAnchor.appendChild(img);
 
