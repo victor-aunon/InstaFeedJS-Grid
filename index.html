@@ -1,19 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/photoswipe.css">
-    <link rel="stylesheet" href="/css/all.min.css">
-</head>
-<body>
-    <div id="instafeed" class="container"></div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="/css/styles.css" />
+        <link rel="stylesheet" href="/css/all.min.css" />
+    </head>
+    <body>
+        <div id="instafeed" class="container"></div>
+        <div class="modal" id="modal">
+            <div class="modal-actions">
+                <div class="open-instagram">
+                    <a
+                        href=""
+                        id="permalink"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                    </a>
+                </div>
+                <button class="close-button" id="close-button">
+                    <i class="far fa-times-circle"></i>
+                </button>
+            </div>
+            <div class="modal-content-container"></div>
+            <div class="modal-caption">
+                <a href="" id="caption" target="_blank" rel="noopener noreferrer"></a>
+            </div>
+        </div>
 
-    <script type="module" src="/scripts/insta_gallery_image_video.js"></script>
-    <!-- <script type="module" src="/scripts/insta_gallery_images_video_thumbnails_photoswipe.js"></script> -->
-    <!-- <script type="module" src="/scripts/insta_gallery_images_photoswipe.js"></script> -->
-</body>
+        <script
+            type="module"
+            src="/scripts/insta_gallery.js"
+        ></script>
+    </body>
 </html>
