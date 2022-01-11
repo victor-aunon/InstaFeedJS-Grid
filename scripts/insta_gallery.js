@@ -6,8 +6,8 @@ const LIMIT = 5 * 4;
 const LAYOUT = layouts.threeInRow;
 
 const feedContainer = document.querySelector('#instafeed');
-const modal = document.querySelector('#modal');
-const closeButton = document.querySelector('#close-button');
+const modal = document.querySelector('#if-modal');
+const closeButton = document.querySelector('#if-close-button');
 
 const chunk = (array, size) =>
     Array.from({ length: Math.ceil(array.length / size) }, (value, index) =>
@@ -37,19 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 modal.addEventListener('click', event => {
     const noCloseElements = [
-        document.querySelector('.modal-content'),
-        document.querySelector('#caption'),
-        document.querySelector('#permalink'),
-        document.querySelector('#prev-button'),
-        document.querySelector('#next-button'),
+        document.querySelector('.if-modal-content'),
+        document.querySelector('#if-caption'),
+        document.querySelector('#if-permalink'),
+        document.querySelector('#if-prev-button'),
+        document.querySelector('#if-next-button'),
     ];
     if (!noCloseElements.includes(event.target)) {
-        modal.classList.remove('modal-visible');
+        modal.classList.remove('if-modal-visible');
     }
 });
 
 closeButton.addEventListener('click', () =>
-    modal.classList.remove('modal-visible')
+    modal.classList.remove('if-modal-visible')
 );
 
 // FUNCTIONS
@@ -59,7 +59,7 @@ function renderData(data) {
 
     for (let i = 0; i < splitData.length; i++) {
         const mosaicDiv = document.createElement('div');
-        const mosaicId = `mosaic-${i}`;
+        const mosaicId = `if-mosaic-${i}`;
         mosaicDiv.id = mosaicId;
 
         splitData[i].forEach((post, index) => {
@@ -73,7 +73,7 @@ function renderData(data) {
 
 function createPost(post) {
     const postAnchor = document.createElement('a');
-    postAnchor.classList.add('post');
+    postAnchor.classList.add('if-post');
     postAnchor.href = post.thumbnail_url || post.media_url;
 
     // Create child element (image or video)
@@ -122,9 +122,9 @@ function createPost(post) {
 
 function displayModal(clickedElement, post, event) {
     // Modal selectors
-    const contentContainer = document.querySelector('.modal-content-container');
-    const sourceLink = document.querySelector('#permalink');
-    const caption = document.querySelector('#caption');
+    const contentContainer = document.querySelector('.if-modal-content-container');
+    const sourceLink = document.querySelector('#if-permalink');
+    const caption = document.querySelector('#if-caption');
 
     // Clear the modal content container
     while (contentContainer.firstChild) {
@@ -134,37 +134,37 @@ function displayModal(clickedElement, post, event) {
     switch (post.media_type) {
         case 'IMAGE':
             const modalImg = document.createElement('img');
-            modalImg.classList.add('modal-content');
+            modalImg.classList.add('if-modal-content');
             modalImg.src = post.media_url;
             modalImg.alt = post.caption;
             contentContainer.appendChild(modalImg);
             break;
         case 'CAROUSEL_ALBUM':
             const slideNum = document.createElement('div');
-            slideNum.id = 'slide-counter';
+            slideNum.id = 'if-slide-counter';
             slideNum.textContent = `1 / ${post.children.data.length}`;
             contentContainer.appendChild(slideNum);
 
             const prevSlide = document.createElement('a');
-            prevSlide.classList.add('slide-button');
-            prevSlide.id = 'prev-button';
+            prevSlide.classList.add('if-slide-button');
+            prevSlide.id = 'if-prev-button';
             prevSlide.innerHTML = `<i class="fas fa-chevron-left"></i>`;
             prevSlide.onclick = () => {
-                const slides = document.querySelectorAll('.slide');
+                const slides = document.querySelectorAll('.if-slide');
                 let visibleIndex;
                 slides.forEach((slide, index) => {
-                    if (slide.classList.contains('modal-content')) {
-                        slide.classList.remove('modal-content');
+                    if (slide.classList.contains('if-modal-content')) {
+                        slide.classList.remove('if-modal-content');
                         slide.style.display = 'none';
                         visibleIndex = index;
                     }
                 });
                 if (visibleIndex === 0) {
-                    slides[slides.length - 1].classList.add('modal-content');
+                    slides[slides.length - 1].classList.add('if-modal-content');
                     slides[slides.length - 1].style.display = 'block';
                     slideNum.textContent = `${post.children.data.length} / ${post.children.data.length}`;
                 } else {
-                    slides[visibleIndex - 1].classList.add('modal-content');
+                    slides[visibleIndex - 1].classList.add('if-modal-content');
                     slides[visibleIndex - 1].style.display = 'block';
                     slideNum.textContent = `${visibleIndex} / ${post.children.data.length}`;
                 }
@@ -172,25 +172,25 @@ function displayModal(clickedElement, post, event) {
             contentContainer.appendChild(prevSlide);
 
             const nextSlide = document.createElement('a');
-            nextSlide.classList.add('slide-button');
-            nextSlide.id = 'next-button';
+            nextSlide.classList.add('if-slide-button');
+            nextSlide.id = 'if-next-button';
             nextSlide.innerHTML = `<i class="fas fa-chevron-right"></i>`;
             nextSlide.onclick = () => {
-                const slides = document.querySelectorAll('.slide');
+                const slides = document.querySelectorAll('.if-slide');
                 let visibleIndex;
                 slides.forEach((slide, index) => {
-                    if (slide.classList.contains('modal-content')) {
-                        slide.classList.remove('modal-content');
+                    if (slide.classList.contains('if-modal-content')) {
+                        slide.classList.remove('if-modal-content');
                         slide.style.display = 'none';
                         visibleIndex = index;
                     }
                 });
                 if (visibleIndex === slides.length - 1) {
-                    slides[0].classList.add('modal-content');
+                    slides[0].classList.add('if-modal-content');
                     slides[0].style.display = 'block';
                     slideNum.textContent = `1 / ${post.children.data.length}`;
                 } else {
-                    slides[visibleIndex + 1].classList.add('modal-content');
+                    slides[visibleIndex + 1].classList.add('if-modal-content');
                     slides[visibleIndex + 1].style.display = 'block';
                     slideNum.textContent = `${visibleIndex + 2} / ${
                         post.children.data.length
@@ -210,9 +210,9 @@ function displayModal(clickedElement, post, event) {
                         slide = document.createElement('vid');
                         slide.controls = true;
                     }
-                    slide.classList.add('slide');
+                    slide.classList.add('if-slide');
                     index === 0
-                        ? slide.classList.add('modal-content')
+                        ? slide.classList.add('if-modal-content')
                         : (slide.style.display = 'none');
                     slide.src = childData.media_url;
                     contentContainer.appendChild(slide);
@@ -221,7 +221,7 @@ function displayModal(clickedElement, post, event) {
             break;
         case 'VIDEO':
             const modalVid = document.createElement('video');
-            modalVid.classList.add('modal-content');
+            modalVid.classList.add('if-modal-content');
             modalVid.controls = true;
             modalVid.src = post.media_url;
             modalVid.poster = post.thumbnail_url;
@@ -252,7 +252,7 @@ function displayModal(clickedElement, post, event) {
             transform: 'scale(1)',
         },
     ],{duration: 400})
-    modal.classList.add('modal-visible');
+    modal.classList.add('if-modal-visible');
 }
 
 async function fetchChildrenFromCarousel(id) {

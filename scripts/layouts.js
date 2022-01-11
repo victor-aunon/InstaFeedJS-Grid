@@ -1,12 +1,12 @@
 
 const layouts = {
     mosaic: {
-        className: 'mosaic',
+        className: 'if-mosaic',
         items: 5
     },
 
     threeInRow: {
-        className: 'three-in-row',
+        className: 'if-three-in-row',
         items: 3
     }
 }
