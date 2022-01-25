@@ -1,7 +1,8 @@
 :root {
-    --imageGap: 0.5rem;
-    --mosaicMarginBottom: 1rem;
-    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --if_image-gap: 0.5rem;
+    --if_mosaic-margin-bottom: 1rem;
+    --if_show-more-less-color: lightseagreen;
+    --if_font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 html {
@@ -14,7 +15,11 @@ html {
     box-sizing: inherit;
 }
 
-img, video {
+
+.if-modal-content img,
+.if-modal-content video,
+.if-post img,
+.if-post video {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -26,7 +31,7 @@ img, video {
     -webkit-touch-callout: none;
 }
 
-.container {
+.if-container {
     max-width: 90%;
     margin: 0 auto;
     display: flex;
@@ -38,27 +43,35 @@ img, video {
     display: grid;
     grid-template-columns: 400px;
     grid-template-rows: repeat(5, 400px);
-    gap: var(--imageGap);
-    margin-bottom: var(--mosaicMarginBottom);
+    gap: var(--if_image-gap);
+    margin-bottom: var(--if_mosaic-margin-bottom);
 }
 
 .if-three-in-row {
     display: grid;
     grid-template-columns: 400px;
     grid-template-rows: 400px;
-    gap: var(--imageGap);
-    margin-bottom: var(--imageGap);
+    gap: var(--if_image-gap);
+    margin-bottom: var(--if_image-gap);
+}
+
+.if-six-in-row {
+    display: grid;
+    grid-template-columns: repeat(2, 40vw);
+    grid-template-rows: repeat(3, 40vw);
+    gap: var(--if_image-gap);
+    margin-bottom: var(--if_image-gap);
 }
 
 @media screen and (min-width:768px) {
 
     .if-mosaic {
-        grid-template-columns: calc(400px + var(--imageGap)) repeat(2, 200px);
+        grid-template-columns: calc(400px + var(--if_image-gap)) repeat(2, 200px);
         grid-template-rows: repeat(2, 200px);
     }
     /* Odd mosaics have the big post on the left */
     .if-mosaic:nth-child(odd) {
-        grid-template-columns: calc(400px + var(--imageGap)) repeat(2, 200px);
+        grid-template-columns: calc(400px + var(--if_image-gap)) repeat(2, 200px);
     }
     .if-mosaic:nth-child(odd) > .post:nth-child(1) {
         grid-column: 1 / 2;
@@ -83,7 +96,7 @@ img, video {
 
     /* Even mosaics have the big post on the left */
     .if-mosaic:nth-child(even) {
-        grid-template-columns: repeat(2, 200px) calc(400px + var(--imageGap));
+        grid-template-columns: repeat(2, 200px) calc(400px + var(--if_image-gap));
     }
     .if-mosaic:nth-child(even) > .post:nth-child(1) {
         grid-column: 1 / 2;
@@ -110,6 +123,20 @@ img, video {
     .if-three-in-row {
         grid-template-columns: repeat(3, 30vw);
         grid-template-rows: 30vw;
+    }
+
+    /* Six posts per row */
+    .if-six-in-row {
+        grid-template-columns: repeat(3, 28vw);
+        grid-template-rows: repeat(2, 28vw);
+    }
+}
+
+@media screen and (min-width:1200px) {
+    /* Six posts per row */
+    .if-six-in-row {
+        grid-template-columns: repeat(6, 15vw);
+        grid-template-rows: 15vw;
     }
 }
 
@@ -158,7 +185,7 @@ img, video {
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgba(0,0,0,0.95); /* Black w/ opacity */
-    font-family: var(--font-family);
+    font-family: var(--if_font-family);
 }
 
 .if-modal-visible {
@@ -175,6 +202,12 @@ img, video {
     align-items: center;
     padding: 0.5rem;
     margin-bottom: 10%;
+}
+
+@media screen and (min-width:768px) {
+    .if-modal-actions {
+        margin-bottom: 0;
+    }
 }
 
 .if-modal-content-container {
@@ -233,7 +266,7 @@ img, video {
         width: auto;
     }
     .if-modal-content-container {
-        height: calc(80% - 73px);
+        height: calc(100% - 73px);
     }
     .if-modal-content-container #if-slide-counter {
         top: 1%;
@@ -287,7 +320,8 @@ img, video {
     background-color: rgba(0, 0, 0, 0.616);
     padding: 0.5rem 1rem;
     border-radius: 10px;
-    font-size: 1.2rem;
+    font-size: 0.8rem;
+    line-height: 1rem;
     position: absolute;
     bottom: 0;
     margin-bottom: 2rem;
@@ -295,7 +329,24 @@ img, video {
     max-width: 90%;
 }
 
+@media screen and (min-width:768px) {
+    .if-modal-caption {
+        font-size: 1rem;
+        line-height: 1.4rem;
+    }
+}
+
 .if-modal-caption a {
     color: #FFFFFF;
     text-decoration: none;
+}
+
+.if-modal-caption p {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+.if-modal-caption .if-show-more,
+.if-modal-caption .if-show-less {
+    color: var(--if_show-more-less-color);
 }

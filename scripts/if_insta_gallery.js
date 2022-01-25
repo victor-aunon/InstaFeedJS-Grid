@@ -1,13 +1,10 @@
-import instaTokenURL from './secrets.js';
-import layouts from './layouts.js';
-
-const LIMIT = 5 * 4;
-// Layout can be mosaic or threeInRow
-const LAYOUT = layouts.threeInRow;
+import instaTokenURL from './if_secrets.js';
+import {config} from './if_config.js'
 
 const feedContainer = document.querySelector('#instafeed');
 const modal = document.querySelector('#if-modal');
 const closeButton = document.querySelector('#if-close-button');
+const showMoreLessSpan = document.querySelector('#if-show-more-less');
 
 const chunk = (array, size) =>
     Array.from({ length: Math.ceil(array.length / size) }, (value, index) =>
@@ -19,12 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(instaTokenURL)
         .then(response => response.json())
         .then(tokenData => {
+            console.log('Token fetched');
             fetch(
-                `https://graph.instagram.com/me/media?fields=caption,id,media_type,media_url,permalink,thumbnail_url,timestamp,username,children&access_token=${tokenData.Token}&limit=${LIMIT}`
+                `https://graph.instagram.com/me/media?fields=caption,id,media_type,media_url,permalink,thumbnail_url,timestamp,username,children&access_token=${tokenData.Token}&limit=${config.LIMIT}`
             )
                 .then(igResponse => igResponse.json())
                 .then(igData => {
                     if (!igData.error) {
+                        console.log('Feed fetched');
                         renderData(igData.data);
                     } else {
                         console.error(igData.error.message);
@@ -38,7 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
 modal.addEventListener('click', event => {
     const noCloseElements = [
         document.querySelector('.if-modal-content'),
+        document.querySelector('.if-modal-caption'),
         document.querySelector('#if-caption'),
+        showMoreLessSpan,
         document.querySelector('#if-permalink'),
         document.querySelector('#if-prev-button'),
         document.querySelector('#if-next-button'),
@@ -55,7 +56,7 @@ closeButton.addEventListener('click', () =>
 // FUNCTIONS
 
 function renderData(data) {
-    const splitData = chunk(data, LAYOUT.items);
+    const splitData = chunk(data, config.LAYOUT.items);
 
     for (let i = 0; i < splitData.length; i++) {
         const mosaicDiv = document.createElement('div');
@@ -66,7 +67,7 @@ function renderData(data) {
             mosaicDiv.appendChild(createPost(post));
         });
 
-        mosaicDiv.classList.add(LAYOUT.className);
+        mosaicDiv.classList.add(config.LAYOUT.className);
         feedContainer.appendChild(mosaicDiv);
     }
 }
@@ -122,7 +123,9 @@ function createPost(post) {
 
 function displayModal(clickedElement, post, event) {
     // Modal selectors
-    const contentContainer = document.querySelector('.if-modal-content-container');
+    const contentContainer = document.querySelector(
+        '.if-modal-content-container'
+    );
     const sourceLink = document.querySelector('#if-permalink');
     const caption = document.querySelector('#if-caption');
 
@@ -234,24 +237,54 @@ function displayModal(clickedElement, post, event) {
     sourceLink.href = post.permalink;
     sourceLink.innerHTML = `<i class="fab fa-instagram"></i>@${post.username}`;
 
-    caption.href = post.permalink;
-    caption.textContent =
-        post.caption !== undefined ? post.caption : 'Ver en Instagram';
+    // caption.href = post.permalink;
+    // Show only 450 characters of the image/video caption
+    if (post.caption) {
+        if (post.caption.length > 450) {
+            caption.innerHTML = post.caption.slice(0, 450);
+            showMoreLessSpan.textContent = ` ...${config.SHOW_MORE}`;
+            showMoreLessSpan.style.display = 'inline';
+            caption.appendChild(showMoreLessSpan);
 
-    modal.animate([
-        {
-            opacity: '0',
-            top: `${event.clientY - window.innerHeight / 2}px`,
-            left: `${event.clientX - window.innerWidth / 2}px`,
-            transform: 'scale(0)',
-        },
-        {
-            opacity: '1',
-            top: '0',
-            left: '0',
-            transform: 'scale(1)',
-        },
-    ],{duration: 400})
+            // Add event listener to the show more/less text
+            showMoreLessSpan.addEventListener('click', () => {
+                console.log('span clicked');
+                if (showMoreLessSpan.classList.contains('if-show-more')) {
+                    caption.innerHTML = post.caption;
+                    showMoreLessSpan.classList.remove('if-show-more');
+                    showMoreLessSpan.classList.add('if-show-less');
+                    showMoreLessSpan.textContent = ` ${config.SHOW_LESS}`;
+                    caption.appendChild(showMoreLessSpan);
+                } else {
+                    caption.innerHTML = post.caption.slice(0, 450);
+                    showMoreLessSpan.classList.remove('if-show-less');
+                    showMoreLessSpan.classList.add('if-show-more');
+                    showMoreLessSpan.textContent = ` ...${config.SHOW_MORE}`;
+                    caption.appendChild(showMoreLessSpan);
+                }
+            });
+        } else {
+            caption.textContent = post.caption;
+        }
+    }
+
+    modal.animate(
+        [
+            {
+                opacity: '0',
+                top: `${event.clientY - window.innerHeight / 2}px`,
+                left: `${event.clientX - window.innerWidth / 2}px`,
+                transform: 'scale(0)',
+            },
+            {
+                opacity: '1',
+                top: '0',
+                left: '0',
+                transform: 'scale(1)',
+            },
+        ],
+        { duration: config.ANIM_DURATION }
+    );
     modal.classList.add('if-modal-visible');
 }
 
@@ -267,6 +300,7 @@ async function fetchChildrenFromCarousel(id) {
         .then(igResponse => igResponse.json())
         .then(igData => {
             if (!igData.error) {
+                console.log('Child fetched');
                 return igData;
             } else {
                 console.error(igData.error.message);

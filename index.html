@@ -5,11 +5,11 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
-        <link rel="stylesheet" href="/css/styles.css" />
+        <link rel="stylesheet" href="/css/if_styles.css" />
         <link rel="stylesheet" href="/css/all.min.css" />
     </head>
     <body>
-        <div id="instafeed" class="container"></div>
+        <div id="instafeed" class="if-container"></div>
         <div class="if-modal" id="if-modal">
             <div class="if-modal-actions">
                 <div class="if-open-instagram">
@@ -27,13 +27,14 @@
             </div>
             <div class="if-modal-content-container"></div>
             <div class="if-modal-caption">
-                <a href="" id="if-caption" target="_blank" rel="noopener noreferrer"></a>
+                <p id="if-caption"></p>
+                <span id="if-show-more-less" class="if-show-more" style="display: none;"></span>
             </div>
         </div>
 
         <script
             type="module"
-            src="/scripts/insta_gallery.js"
+            src="/scripts/if_insta_gallery.js"
         ></script>
     </body>
 </html>
