@@ -247,8 +247,8 @@ function displayModal(clickedElement, post, event) {
             caption.appendChild(showMoreLessSpan);
 
             // Add event listener to the show more/less text
-            showMoreLessSpan.addEventListener('click', () => {
-                console.log('span clicked');
+            showMoreLessSpan.addEventListener('click', event => {
+                event.stopImmediatePropagation();
                 if (showMoreLessSpan.classList.contains('if-show-more')) {
                     caption.innerHTML = post.caption;
                     showMoreLessSpan.classList.remove('if-show-more');

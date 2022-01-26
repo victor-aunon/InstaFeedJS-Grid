@@ -1,7 +1,7 @@
 :root {
     --if_image-gap: 0.5rem;
     --if_mosaic-margin-bottom: 1rem;
-    --if_show-more-less-color: lightseagreen;
+    --if_show-more-less-color: rgb(16, 150, 160);
     --if_font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
@@ -184,8 +184,37 @@ html {
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.95); /* Black w/ opacity */
     font-family: var(--if_font-family);
+}
+
+.if-modal.if-dark {
+    background-color: rgba(0,0,0,0.95); /* Black w/ opacity */
+    color: #FFFFFF;
+    --if_account-color: #FFFFFF;
+    --if_slide-button-color: #FFFFFF;
+    --if_bg-slide-button-color: rgba(0, 0, 0, 0.4);
+    --if_btn-hover: #e6e6e6;
+    --if_bg-caption: rgba(0, 0, 0, 0.616);
+}
+
+.if-modal.if-light {
+    background-color: rgba(255,255,255,0.9); /* Black w/ opacity */
+    color: #000000;
+    --if_account-color: #000000;
+    --if_slide-button-color: #000000;
+    --if_bg-slide-button-color: rgba(255, 255, 255, 0.4);
+    --if_btn-hover: #333333;
+    --if_bg-caption: rgba(255, 255, 255, 0.9);
+}
+
+.if-modal.if-light-blue {
+    background-color: rgba(255,255,255,0.93); /* Black w/ opacity */
+    color: #000000;
+    --if_account-color: #1CC4DB;
+    --if_slide-button-color: #1CC4DB;
+    --if_bg-slide-button-color: rgba(255, 255, 255, 0.4);
+    --if_btn-hover: #1CC4DB;
+    --if_bg-caption: #1cc5db36;
 }
 
 .if-modal-visible {
@@ -218,8 +247,8 @@ html {
     position: absolute;
     top: -45px;
     right: 20px;
-    color: #FFFFFF;
-    background-color:rgba(0, 0, 0, 0.5);
+    color: var(--if_slide-button-color);;
+    background-color: var(--if_bg-slide-button-color);
     padding: 0.5rem;
     border-radius: 20px;
     font-weight: 600;
@@ -229,8 +258,8 @@ html {
 .if-modal-content-container .if-slide-button {
     position: absolute;
     top: 50%;
-    color: #FFFFFF;
-    background-color:rgba(0, 0, 0, 0.3);
+    color: var(--if_slide-button-color);;
+    background-color: var(--if_bg-slide-button-color);
     padding: 0.5rem 1.2rem;
     font-size: 2rem;
     border-radius: 60px;
@@ -288,7 +317,7 @@ html {
 /* BUTTONS AT THE TOP OF THE MODAL */
 .if-open-instagram {
     display: flex;
-    color: #FFFFFF;
+    color: var(--if_account-color);
     font-size: 1.5rem;
     justify-content: space-between;
     align-items: center;
@@ -301,23 +330,23 @@ html {
 .if-open-instagram a {
     margin: 0 2rem 0 0;
     text-decoration: none;
-    color: #FFFFFF;
+    color: inherit;
 }
 
 .if-close-button {
-    color: #FFFFFF;
+    color: inherit;
     background: unset;
     border: none;
     font-size: 3rem;
 }
 
 .if-close-button:hover {
-    color: #e6e6e6;
+    color: var(--if_btn-hover);
 }
 
 /* MODAL CAPTION */
 .if-modal-caption {
-    background-color: rgba(0, 0, 0, 0.616);
+    background-color: var(--if_bg-caption);
     padding: 0.5rem 1rem;
     border-radius: 10px;
     font-size: 0.8rem;
@@ -337,16 +366,17 @@ html {
 }
 
 .if-modal-caption a {
-    color: #FFFFFF;
+    color: inherit;
     text-decoration: none;
 }
 
 .if-modal-caption p {
-    color: #FFFFFF;
+    color: inherit;
     text-decoration: none;
 }
 
 .if-modal-caption .if-show-more,
 .if-modal-caption .if-show-less {
     color: var(--if_show-more-less-color);
+    cursor: pointer;
 }
