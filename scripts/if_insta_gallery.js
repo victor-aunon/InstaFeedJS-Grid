@@ -6,6 +6,8 @@ const modal = document.querySelector('#if-modal');
 const closeButton = document.querySelector('#if-close-button');
 const showMoreLessSpan = document.querySelector('#if-show-more-less');
 
+let captionText = '';
+
 const chunk = (array, size) =>
     Array.from({ length: Math.ceil(array.length / size) }, (value, index) =>
         array.slice(index * size, index * size + size)
@@ -53,8 +55,25 @@ closeButton.addEventListener('click', () =>
     modal.classList.remove('if-modal-visible')
 );
 
-// FUNCTIONS
+showMoreLessSpan.addEventListener('click', event => {
+    event.stopImmediatePropagation();
+    const captionElement = document.querySelector('#if-caption')
+    if (showMoreLessSpan.classList.contains('if-show-more')) {
+        captionElement.innerHTML = captionText;
+        showMoreLessSpan.classList.remove('if-show-more');
+        showMoreLessSpan.classList.add('if-show-less');
+        showMoreLessSpan.textContent = ` ${config.SHOW_LESS}`;
+        captionElement.appendChild(showMoreLessSpan);
+    } else {
+        captionElement.innerHTML = captionText.slice(0, 450);
+        showMoreLessSpan.classList.remove('if-show-less');
+        showMoreLessSpan.classList.add('if-show-more');
+        showMoreLessSpan.textContent = ` ...${config.SHOW_MORE}`;
+        captionElement.appendChild(showMoreLessSpan);
+    }
+});
 
+// FUNCTIONS
 function renderData(data) {
     const splitData = chunk(data, config.LAYOUT.items);
 
@@ -241,28 +260,11 @@ function displayModal(clickedElement, post, event) {
     // Show only 450 characters of the image/video caption
     if (post.caption) {
         if (post.caption.length > 450) {
+            captionText = post.caption;
             caption.innerHTML = post.caption.slice(0, 450);
             showMoreLessSpan.textContent = ` ...${config.SHOW_MORE}`;
             showMoreLessSpan.style.display = 'inline';
             caption.appendChild(showMoreLessSpan);
-
-            // Add event listener to the show more/less text
-            showMoreLessSpan.addEventListener('click', event => {
-                event.stopImmediatePropagation();
-                if (showMoreLessSpan.classList.contains('if-show-more')) {
-                    caption.innerHTML = post.caption;
-                    showMoreLessSpan.classList.remove('if-show-more');
-                    showMoreLessSpan.classList.add('if-show-less');
-                    showMoreLessSpan.textContent = ` ${config.SHOW_LESS}`;
-                    caption.appendChild(showMoreLessSpan);
-                } else {
-                    caption.innerHTML = post.caption.slice(0, 450);
-                    showMoreLessSpan.classList.remove('if-show-less');
-                    showMoreLessSpan.classList.add('if-show-more');
-                    showMoreLessSpan.textContent = ` ...${config.SHOW_MORE}`;
-                    caption.appendChild(showMoreLessSpan);
-                }
-            });
         } else {
             caption.textContent = post.caption;
         }

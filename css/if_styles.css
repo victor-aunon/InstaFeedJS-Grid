@@ -378,5 +378,6 @@ html {
 .if-modal-caption .if-show-more,
 .if-modal-caption .if-show-less {
     color: var(--if_show-more-less-color);
+    font-weight: bold;
     cursor: pointer;
 }
