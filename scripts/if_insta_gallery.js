@@ -7,6 +7,7 @@ const closeButton = document.querySelector('#if-close-button');
 const showMoreLessSpan = document.querySelector('#if-show-more-less');
 
 let captionText = '';
+let captionCharacters;
 
 const chunk = (array, size) =>
     Array.from({ length: Math.ceil(array.length / size) }, (value, index) =>
@@ -15,6 +16,11 @@ const chunk = (array, size) =>
 
 // EVENT LISTENERS
 document.addEventListener('DOMContentLoaded', () => {
+    if (window.innerWidth < config.TABLET_WIDTH) {
+        captionCharacters = 220;
+    } else if (window.innerWidth < config.DESKTOP_WIDTH) {
+        captionCharacters = 450;
+    }
     fetch(instaTokenURL)
         .then(response => response.json())
         .then(tokenData => {
@@ -65,6 +71,19 @@ showMoreLessSpan.addEventListener('click', event => {
         showMoreLessSpan.textContent = ` ${config.SHOW_LESS}`;
         captionElement.appendChild(showMoreLessSpan);
     } else {
+        const videoElement = document.querySelector('video.if-modal-content');
+        if (videoElement) {
+            if (videoElement.clientHeight / window.innerHeight >= 0.7) {
+                captionElement.innerHTML = captionText.slice(0, 10);
+            } else {
+                captionElement.innerHTML = captionText.slice(
+                    0,
+                    captionCharacters
+                );
+            }
+        } else {
+            captionElement.innerHTML = captionText.slice(0, captionCharacters);
+        }
         captionElement.innerHTML = captionText.slice(0, 450);
         showMoreLessSpan.classList.remove('if-show-less');
         showMoreLessSpan.classList.add('if-show-more');
@@ -256,17 +275,31 @@ function displayModal(clickedElement, post, event) {
     sourceLink.href = post.permalink;
     sourceLink.innerHTML = `<i class="fab fa-instagram"></i>@${post.username}`;
 
-    // caption.href = post.permalink;
-    // Show only 450 characters of the image/video caption
+    // Show only part of the image/video caption
     if (post.caption) {
-        if (post.caption.length > 450) {
+        if (post.caption.length > captionCharacters) {
             captionText = post.caption;
-            caption.innerHTML = post.caption.slice(0, 450);
+            caption.innerHTML = post.caption.slice(0, captionCharacters);
             showMoreLessSpan.textContent = ` ...${config.SHOW_MORE}`;
             showMoreLessSpan.style.display = 'inline';
             caption.appendChild(showMoreLessSpan);
         } else {
             caption.textContent = post.caption;
+        }
+        // Show only a few characters when the video cover is vertical
+        const videoElement = document.querySelector('video.if-modal-content');
+        if (videoElement) {
+            videoElement.addEventListener('loadedmetadata', () => {
+                if (videoElement.clientHeight / window.innerHeight >= 0.7) {
+                    // Reduce video top margin
+                    videoElement.style.marginTop = '-7%';
+                    captionText = post.caption;
+                    caption.innerHTML = post.caption.slice(0, 10);
+                    showMoreLessSpan.textContent = ` ...${config.SHOW_MORE}`;
+                    showMoreLessSpan.style.display = 'inline';
+                    caption.appendChild(showMoreLessSpan);
+                }
+            });
         }
     }
 

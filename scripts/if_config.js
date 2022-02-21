@@ -10,7 +10,11 @@ const config = {
     // Show more text
     SHOW_MORE: 'Mostrar más',
     // Show less text
-    SHOW_LESS: 'Mostrar menos'
+    SHOW_LESS: 'Mostrar menos',
+    // Tablet width
+    TABLET_WIDTH: 760,
+    // Desktop width
+    DESKTOP_WIDTH: 1180
 }
 
 export { config };

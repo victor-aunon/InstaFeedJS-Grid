@@ -1,7 +1,6 @@
 :root {
     --if_image-gap: 0.5rem;
     --if_mosaic-margin-bottom: 1rem;
-    --if_show-more-less-color: rgb(16, 150, 160);
     --if_font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
@@ -192,6 +191,9 @@ html {
     --if_bg-slide-button-color: rgba(0, 0, 0, 0.4);
     --if_btn-hover: #e6e6e6;
     --if_bg-caption: rgba(0, 0, 0, 0.616);
+    --if_bg-caption-expanded: rgba(0, 0, 0, 0.836);
+    --if_show-more-color: #e7f5ab;
+    --if_show-less-color: #e7f5ab;
 }
 
 .if-modal.if-light {
@@ -202,6 +204,9 @@ html {
     --if_bg-slide-button-color: rgba(255, 255, 255, 0.4);
     --if_btn-hover: #333333;
     --if_bg-caption: rgba(255, 255, 255, 0.9);
+    --if_bg-caption-expanded: rgba(255, 255, 255, 0.9);
+    --if_show-more-color: #222222;
+    --if_show-less-color: #222222;
 }
 
 .if-modal.if-light-blue {
@@ -212,6 +217,9 @@ html {
     --if_bg-slide-button-color: rgba(255, 255, 255, 0.4);
     --if_btn-hover: #1CC4DB;
     --if_bg-caption: #1cc5db36;
+    --if_bg-caption-expanded: #a7d8dde5;
+    --if_show-more-color: #1096a0;
+    --if_show-less-color: #1096a0;
 }
 
 .if-modal-visible {
@@ -350,9 +358,13 @@ html {
     line-height: 1rem;
     position: absolute;
     bottom: 0;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     left: 5%;
     max-width: 90%;
+}
+
+.if-modal-caption-expanded {
+    background-color: var(--if_bg-caption-expanded);
 }
 
 @media screen and (min-width:768px) {
@@ -372,9 +384,14 @@ html {
     text-decoration: none;
 }
 
-.if-modal-caption .if-show-more,
+.if-modal-caption .if-show-more {
+    color: var(--if_show-more-color);
+    font-weight: bold;
+    cursor: pointer;
+}
+
 .if-modal-caption .if-show-less {
-    color: var(--if_show-more-less-color);
+    color: var(--if_show-less-color);
     font-weight: bold;
     cursor: pointer;
 }
